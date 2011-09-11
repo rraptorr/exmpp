@@ -190,6 +190,7 @@ exmpp_tls_gnutls_control(ErlDrvData drv_data, unsigned int command,
 	unsigned long data_len;
 	ErlDrvBinary *b;
 	ei_x_buff *to_send;
+	gnutls_datum_t cb;
 
 	edd = (struct exmpp_tls_gnutls_data *)drv_data;
 
@@ -423,10 +424,32 @@ exmpp_tls_gnutls_control(ErlDrvData drv_data, unsigned int command,
 	case COMMAND_QUIET_SHUTDOWN:
 		break;
 	case COMMAND_PORT_REVISION:
+		/* Store the revision in the buffer. */
+		to_send = exmpp_new_xbuf();
+		if (to_send == NULL)
+			return (-1);
+		ei_x_encode_string(to_send, "$Revision$");
+
+		COPY_AND_FREE_BUF(to_send, size, b, RET_ERROR);
 		break;
 	case COMMAND_GET_PEER_FINISHED:
-		break;
 	case COMMAND_GET_FINISHED:
+		ret = gnutls_session_channel_binding(*edd->session, GNUTLS_CB_TLS_UNIQUE, &cb);
+		if (ret == GNUTLS_E_SUCCESS) {
+			size = cb.size + 1;
+			b = driver_alloc_binary(size);
+			b->orig_bytes[0] = RET_OK;
+			memcpy(b->orig_bytes + 1, cb.data, size);
+		} else {
+			to_send = exmpp_new_xbuf();
+			if (to_send == NULL)
+				return (-1);
+			ei_x_encode_tuple_header(to_send, 2);
+			ei_x_encode_long(to_send, ret);
+			ei_x_encode_string(to_send, gnutls_strerror(ret));
+
+			COPY_AND_FREE_BUF(to_send, size, b, RET_ERROR);
+		}
 		break;
 	default:
 		/* Commad not recognized. */
