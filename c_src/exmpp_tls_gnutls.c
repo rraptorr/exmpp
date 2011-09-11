@@ -15,6 +15,10 @@ struct exmpp_tls_gnutls_data {
 	char		*certificate;
 	char		*private_key;
 
+	/* Peer verification. */
+	int		 verify_peer;
+	char		*expected_id;
+
 	gnutls_session_t *session;
 	gnutls_certificate_credentials_t *credentials;
 
@@ -142,6 +146,8 @@ exmpp_tls_gnutls_start(ErlDrvPort port, char *command)
 
 	edd->mode = TLS_MODE_UNKNOWN;
 	edd->certificate = edd->private_key = NULL;
+	edd->verify_peer = 0;
+	edd->expected_id = NULL;
 	edd->session = NULL;
 	edd->credentials = NULL;
 	edd->input_buf = edd->output_buf = NULL;
@@ -160,6 +166,9 @@ exmpp_tls_gnutls_stop(ErlDrvData drv_data)
 		driver_free(edd->certificate);
 	if (edd->private_key != NULL)
 		driver_free(edd->private_key);
+	if (edd->expected_id != NULL) {
+		driver_free(edd->expected_id);
+	}
 	if (edd->session != NULL) {
 		gnutls_deinit(*edd->session);
 		driver_free(edd->session);
@@ -191,6 +200,8 @@ exmpp_tls_gnutls_control(ErlDrvData drv_data, unsigned int command,
 	ErlDrvBinary *b;
 	ei_x_buff *to_send;
 	gnutls_datum_t cb;
+	const gnutls_datum_t *cert;
+	unsigned int list_size;
 
 	edd = (struct exmpp_tls_gnutls_data *)drv_data;
 
@@ -242,6 +253,23 @@ exmpp_tls_gnutls_control(ErlDrvData drv_data, unsigned int command,
 
 		break;
 	case COMMAND_SET_PEER_VERIF:
+		index = exmpp_skip_version(buf);
+
+		/* Check if the identity of the remote peer must be
+		 * verified. */
+		ei_get_type(buf, &index, &type, &type_size);
+		switch (type) {
+		case ERL_ATOM_EXT:
+			ei_decode_boolean(buf, &index, &(edd->verify_peer));
+			break;
+		case ERL_STRING_EXT:
+			edd->expected_id = driver_alloc(type_size + 1);
+			if (edd->expected_id == NULL)
+				return (-1);
+			ei_decode_string(buf, &index, edd->expected_id);
+			edd->verify_peer = 1;
+			break;
+		}
 		break;
 	case COMMAND_SET_TRUSTED_CERTS:
 		break;
@@ -275,6 +303,10 @@ exmpp_tls_gnutls_control(ErlDrvData drv_data, unsigned int command,
 			gnutls_certificate_set_x509_key_file(*edd->credentials, edd->certificate, edd->private_key, GNUTLS_X509_FMT_PEM);
 		}
 		gnutls_credentials_set(*edd->session, GNUTLS_CRD_CERTIFICATE, *edd->credentials);
+
+		if (edd->verify_peer) {
+			gnutls_certificate_server_set_request(*edd->session, GNUTLS_CERT_REQUEST);
+		}
 		break;
 	case COMMAND_HANDSHAKE:
 		ret = gnutls_handshake(*edd->session);
@@ -385,6 +417,20 @@ exmpp_tls_gnutls_control(ErlDrvData drv_data, unsigned int command,
 
 		break;
 	case COMMAND_GET_PEER_CERTIFICATE:
+		cert = gnutls_certificate_get_peers(*edd->session, &list_size);
+		if (cert != NULL) {
+			size = cert->size + 1;
+			b = driver_alloc_binary(size);
+			b->orig_bytes[0] = RET_OK;
+			memcpy(b->orig_bytes + 1, cert->data, size);
+		} else {
+			to_send = exmpp_new_xbuf();
+			if (to_send == NULL)
+				return (-1);
+			ei_x_encode_atom(to_send, "no_certificate");
+
+			COPY_AND_FREE_BUF(to_send, size, b, RET_ERROR);
+		}
 		break;
 	case COMMAND_GET_VERIFY_RESULT:
 		break;
