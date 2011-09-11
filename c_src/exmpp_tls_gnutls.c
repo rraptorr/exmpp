@@ -5,6 +5,8 @@
 
 #define	DRIVER_NAME	exmpp_tls_gnutls
 
+#define	BUF_SIZE	4096
+
 /* Driver data. */
 struct exmpp_tls_gnutls_data {
 	int		 mode;
@@ -15,6 +17,11 @@ struct exmpp_tls_gnutls_data {
 
 	gnutls_session_t *session;
 	gnutls_certificate_credentials_t *credentials;
+
+	char            *input_buf;
+	int             input_buf_size;
+	char            *output_buf;
+	int             output_buf_size;
 };
 
 #define	COPY_AND_FREE_BUF(to_send, size, b, ret)			\
@@ -24,6 +31,50 @@ struct exmpp_tls_gnutls_data {
 	memcpy((b)->orig_bytes + 1, (to_send)->buff,			\
 	    (to_send)->index);						\
 	exmpp_free_xbuf((to_send));
+
+static ssize_t
+exmpp_gnutls_pull(gnutls_transport_ptr_t ptr, void *buf, size_t size)
+{
+	struct exmpp_tls_gnutls_data *edd;
+	edd = (struct exmpp_tls_gnutls_data *)ptr;
+
+	if (edd->input_buf_size == 0) {
+		gnutls_transport_set_errno(*edd->session, EAGAIN);
+		return -1;
+	}
+
+	size = size > edd->input_buf_size ? edd->input_buf_size : size;
+	memcpy(buf, edd->input_buf, size);
+	edd->input_buf_size -= size;
+	if (edd->input_buf_size == 0) {
+		driver_free(edd->input_buf);
+		edd->input_buf = NULL;
+	} else {
+		memmove(edd->input_buf, edd->input_buf + size, edd->input_buf_size);
+		edd->input_buf = driver_realloc(edd->input_buf, edd->input_buf_size);
+	}
+
+	return size;
+}
+
+static ssize_t
+exmpp_gnutls_push(gnutls_transport_ptr_t ptr, const void *buf, size_t size)
+{
+	struct exmpp_tls_gnutls_data *edd;
+	edd = (struct exmpp_tls_gnutls_data *)ptr;
+
+	if (edd->output_buf_size == 0) {
+		edd->output_buf = driver_alloc(size);
+		edd->output_buf_size = size;
+		memcpy(edd->output_buf, buf, size);
+	} else {
+		edd->output_buf = driver_realloc(edd->output_buf, edd->output_buf_size + size);
+		memcpy(edd->output_buf + edd->output_buf_size, buf, size);
+		edd->output_buf_size += size;
+	}
+
+	return size;
+}
 
 static int
 exmpp_gnutls_mutex_init(void **mutex)
@@ -93,6 +144,8 @@ exmpp_tls_gnutls_start(ErlDrvPort port, char *command)
 	edd->certificate = edd->private_key = NULL;
 	edd->session = NULL;
 	edd->credentials = NULL;
+	edd->input_buf = edd->output_buf = NULL;
+	edd->input_buf_size = edd->output_buf_size = 0;
 
 	return (ErlDrvData)edd;
 }
@@ -115,6 +168,12 @@ exmpp_tls_gnutls_stop(ErlDrvData drv_data)
 		gnutls_certificate_free_credentials(*edd->credentials);
 		driver_free(edd->credentials);
 	}
+	if (edd->input_buf != NULL) {
+		driver_free(edd->input_buf);
+	}
+	if (edd->output_buf != NULL) {
+		driver_free(edd->output_buf);
+	}
 
 	driver_free(edd);
 }
@@ -124,10 +183,11 @@ exmpp_tls_gnutls_control(ErlDrvData drv_data, unsigned int command,
     char *buf, int len, char **rbuf, int rlen)
 {
 	struct exmpp_tls_gnutls_data *edd;
-	int index, arity, type, type_size;
+	int ret, index, arity, type, type_size;
 	char atom[MAXATOMLEN];
 	size_t size;
 	long mode;
+	unsigned long data_len;
 	ErlDrvBinary *b;
 	ei_x_buff *to_send;
 
@@ -200,31 +260,165 @@ exmpp_tls_gnutls_control(ErlDrvData drv_data, unsigned int command,
 			break;
 		}
 
-		if (edd->certificate != NULL && edd->private_key != NULL) {
-			edd->credentials = driver_alloc(sizeof(*edd->credentials));
-			if (edd->credentials == NULL) {
-				return -1;
-			}
-			gnutls_certificate_allocate_credentials(edd->credentials);
-			gnutls_certificate_set_x509_key_file(*edd->credentials, edd->certificate, edd->private_key, GNUTLS_X509_FMT_PEM);
-			gnutls_credentials_set(*edd->session, GNUTLS_CRD_CERTIFICATE, edd->credentials);
+		gnutls_priority_set_direct(*edd->session, "NORMAL", NULL);
+		gnutls_transport_set_ptr(*edd->session, edd);
+		gnutls_transport_set_pull_function(*edd->session, exmpp_gnutls_pull);
+		gnutls_transport_set_push_function(*edd->session, exmpp_gnutls_push);
+
+		edd->credentials = driver_alloc(sizeof(*edd->credentials));
+		if (edd->credentials == NULL) {
+			return -1;
 		}
+		gnutls_certificate_allocate_credentials(edd->credentials);
+		if (edd->certificate != NULL && edd->private_key != NULL) {
+			gnutls_certificate_set_x509_key_file(*edd->credentials, edd->certificate, edd->private_key, GNUTLS_X509_FMT_PEM);
+		}
+		gnutls_credentials_set(*edd->session, GNUTLS_CRD_CERTIFICATE, *edd->credentials);
 		break;
 	case COMMAND_HANDSHAKE:
+		ret = gnutls_handshake(*edd->session);
+		if (ret != GNUTLS_E_SUCCESS) {
+			switch (ret) {
+			case GNUTLS_E_AGAIN:
+			case GNUTLS_E_INTERRUPTED:
+				size = 1;
+				b = driver_alloc_binary(size);
+				b->orig_bytes[0] = RET_WANT_READ;
+				break;
+			default:
+				to_send = exmpp_new_xbuf();
+				if (to_send == NULL)
+					return -1;
+				ei_x_encode_tuple_header(to_send, 2);
+				ei_x_encode_long(to_send, ret);
+				ei_x_encode_string(to_send, gnutls_strerror(ret));
+
+				COPY_AND_FREE_BUF(to_send, size, b, RET_ERROR);
+				break;
+			}
+		}
 		break;
 	case COMMAND_SET_ENCRYPTED_INPUT:
+		if (edd->input_buf_size == 0) {
+			edd->input_buf = driver_alloc(len);
+			memcpy(edd->input_buf, buf, len);
+			edd->input_buf_size = len;
+		} else {
+			edd->input_buf = driver_realloc(edd->input_buf, edd->input_buf_size + len);
+			memcpy(edd->input_buf + edd->input_buf_size, buf, len);
+			edd->input_buf_size += len;
+		}
 		break;
 	case COMMAND_GET_DECRYPTED_INPUT:
+		index = exmpp_skip_version(buf);
+
+		/* Get data length the caller is waiting for. */
+		ei_decode_ulong(buf, &index, &data_len);
+		if (data_len == 0)
+			data_len = BUF_SIZE;
+
+		/* Allocate binary to copy decrypted data. */
+		rlen = data_len + 1;
+		size = 1;
+		b = driver_alloc_binary(rlen);
+		b->orig_bytes[0] = RET_OK;
+
+		ret = gnutls_record_recv(*edd->session, b->orig_bytes + size, data_len);
+		if (ret > 0) {
+			size += ret;
+			b = driver_realloc_binary(b, size);
+		} else {
+			driver_free_binary(b);
+			b = NULL;
+
+			switch (ret) {
+			case GNUTLS_E_INTERRUPTED:
+			case GNUTLS_E_AGAIN:
+				size = 1;
+				b = driver_alloc_binary(size);
+				b->orig_bytes[0] = RET_WANT_READ;
+
+				break;
+			default:
+				to_send = exmpp_new_xbuf();
+				if (to_send == NULL)
+					return (-1);
+				ei_x_encode_atom(to_send, "decrypt_failed");
+
+				COPY_AND_FREE_BUF(to_send, size, b, RET_ERROR);
+			}
+		}
 		break;
 	case COMMAND_SET_DECRYPTED_OUTPUT:
+		ret = gnutls_record_send(*edd->session, buf, len);
+		if (ret <= 0) {
+			switch (ret) {
+			case GNUTLS_E_INTERRUPTED:
+			case GNUTLS_E_AGAIN:
+				size = 1;
+				b = driver_alloc_binary(size);
+				b->orig_bytes[0] = RET_WANT_READ;
+
+				break;
+			default:
+				to_send = exmpp_new_xbuf();
+				if (to_send == NULL)
+					return (-1);
+				ei_x_encode_atom(to_send, "encrypt_failed");
+
+				COPY_AND_FREE_BUF(to_send, size, b, RET_ERROR);
+			}
+		}
 		break;
 	case COMMAND_GET_ENCRYPTED_OUTPUT:
+		size = edd->output_buf_size + 1;
+		b = driver_alloc_binary(size);
+		b->orig_bytes[0] = RET_OK;
+
+		if (edd->output_buf_size != 0) {
+			memcpy(b->orig_bytes + 1, edd->output_buf, edd->output_buf_size);
+			edd->output_buf_size = 0;
+			driver_free(edd->output_buf);
+			edd->output_buf = NULL;
+		}
+
 		break;
 	case COMMAND_GET_PEER_CERTIFICATE:
 		break;
 	case COMMAND_GET_VERIFY_RESULT:
 		break;
 	case COMMAND_SHUTDOWN:
+		ret = gnutls_bye(*edd->session, GNUTLS_SHUT_RDWR);
+		if (ret != GNUTLS_E_SUCCESS) {
+			switch (ret) {
+			case GNUTLS_E_INTERRUPTED:
+			case GNUTLS_E_AGAIN:
+				size = 1;
+				b = driver_alloc_binary(size);
+				if (edd->output_buf_size != 0) {
+					b->orig_bytes[0] = RET_WANT_WRITE;
+				} else if (gnutls_record_get_direction(*edd->session) == 0) {
+					b->orig_bytes[0] = RET_WANT_READ;
+				} else {
+					b->orig_bytes[0] = RET_WANT_WRITE;
+				}
+				break;
+			default:
+				to_send = exmpp_new_xbuf();
+				if (to_send == NULL)
+					return (-1);
+				ei_x_encode_tuple_header(to_send, 2);
+				ei_x_encode_long(to_send, ret);
+				ei_x_encode_string(to_send, gnutls_strerror(ret));
+
+				COPY_AND_FREE_BUF(to_send, size, b, RET_ERROR);
+				break;
+			}
+		} else if (edd->output_buf_size != 0) {
+			size = 1;
+			b = driver_alloc_binary(size);
+			b->orig_bytes[0] = RET_WANT_WRITE;
+		}
 		break;
 	case COMMAND_QUIET_SHUTDOWN:
 		break;
