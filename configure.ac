@@ -318,7 +318,7 @@ fi
 dnl GnuTLS TLS port driver.
 EXMPP_GNUTLS(build_with_gnutls="yes", build_with_gnutls="no")
 AM_CONDITIONAL(WITH_GNUTLS, test "x${build_with_gnutls}" = "xyes")
-if test "x${build_with_openssl}" = "xyes"; then
+if test "x${build_with_gnutls}" = "xyes"; then
 	append_to_EMKOPTS "{d, 'HAVE_GNUTLS'}"
 fi
 
