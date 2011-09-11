@@ -315,6 +315,13 @@ if test "x${build_with_openssl}" = "xyes"; then
 	append_to_EMKOPTS "{d, 'HAVE_OPENSSL'}"
 fi
 
+dnl GnuTLS TLS port driver.
+EXMPP_GNUTLS(build_with_gnutls="yes", build_with_gnutls="no")
+AM_CONDITIONAL(WITH_GNUTLS, test "x${build_with_gnutls}" = "xyes")
+if test "x${build_with_openssl}" = "xyes"; then
+	append_to_EMKOPTS "{d, 'HAVE_GNUTLS'}"
+fi
+
 echo
 COLORED_ECHO([%BCompression engines dependencies%b])
 
@@ -437,6 +444,7 @@ COLORED_ECHO([      . LibXML2:        ${build_with_libxml2}])
 echo
 COLORED_ECHO([    TLS engines:])
 COLORED_ECHO([      . OpenSSL:        ${build_with_openssl}])
+COLORED_ECHO([      . GnuTLS:         ${build_with_gnutls}])
 echo
 COLORED_ECHO([    Compression engines:])
 COLORED_ECHO([      . Zlib:           ${build_with_zlib}])

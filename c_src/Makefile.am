@@ -12,6 +12,10 @@ if WITH_OPENSSL
 execdrivers_LTLIBRARIES += exmpp_tls_openssl.la
 endif
 
+if WITH_GNUTLS
+execdrivers_LTLIBRARIES += exmpp_tls_gnutls.la
+endif
+
 if WITH_ZLIB
 execdrivers_LTLIBRARIES += exmpp_compress_zlib.la
 endif
@@ -93,6 +97,19 @@ exmpp_tls_openssl_la_SOURCES = exmpp_driver.h				\
 			       exmpp_tls.h				\
 			       exmpp_tls.c				\
 			       exmpp_tls_openssl.c
+
+# GnuTLS TLS port driver.
+exmpp_tls_gnutls_la_CPPFLAGS = $(EI_CPPFLAGS)				\
+			       $(GNUTLS_CPPFLAGS)
+exmpp_tls_gnutls_la_LDFLAGS = -module -avoid-version			\
+			      $(ERL_DRIVER_LDFLAGS)			\
+			      $(EI_LDFLAGS) $(EI_LIBS)			\
+			      $(GNUTLS_LDFLAGS) $(GNUTLS_LIBS)
+exmpp_tls_gnutls_la_SOURCES = exmpp_driver.h				\
+			      exmpp_driver.c				\
+			      exmpp_tls.h				\
+			      exmpp_tls.c				\
+			      exmpp_tls_gnutls.c
 
 # Zlib compression port driver.
 exmpp_compress_zlib_la_CPPFLAGS = $(EI_CPPFLAGS)			\
