@@ -7,6 +7,8 @@
 
 #define	BUF_SIZE	4096
 
+static gnutls_priority_t priority;
+
 /* Driver data. */
 struct exmpp_tls_gnutls_data {
 	int		 mode;
@@ -118,16 +120,22 @@ exmpp_tls_gnutls_init(void)
 					driver_realloc, driver_free);
 	gnutls_global_set_mutex(exmpp_gnutls_mutex_init, exmpp_gnutls_mutex_deinit,
 				exmpp_gnutls_mutex_lock, exmpp_gnutls_mutex_unlock);
-	if (gnutls_global_init() == GNUTLS_E_SUCCESS) {
-		return 0;
-	} else {
+	if (gnutls_global_init() != GNUTLS_E_SUCCESS) {
 		return -1;
 	}
+
+	if (gnutls_priority_init(&priority, "PERFORMANCE:+COMP-DEFLATE", NULL) != GNUTLS_E_SUCCESS) {
+		gnutls_global_deinit();
+		return -1;
+	}
+
+	return 0;
 }
 
 static void
 exmpp_tls_gnutls_finish(void)
 {
+	gnutls_priority_deinit(priority);
 	gnutls_global_deinit();
 }
 
@@ -289,7 +297,7 @@ exmpp_tls_gnutls_control(ErlDrvData drv_data, unsigned int command,
 			break;
 		}
 
-		gnutls_priority_set_direct(*edd->session, "PERFORMANCE:+COMP-DEFLATE", NULL);
+		gnutls_priority_set(*edd->session, priority);
 		gnutls_transport_set_ptr(*edd->session, edd);
 		gnutls_transport_set_pull_function(*edd->session, exmpp_gnutls_pull);
 		gnutls_transport_set_push_function(*edd->session, exmpp_gnutls_push);
