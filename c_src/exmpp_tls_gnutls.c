@@ -289,7 +289,7 @@ exmpp_tls_gnutls_control(ErlDrvData drv_data, unsigned int command,
 			break;
 		}
 
-		gnutls_priority_set_direct(*edd->session, "NORMAL", NULL);
+		gnutls_priority_set_direct(*edd->session, "PERFORMANCE:+COMP-DEFLATE", NULL);
 		gnutls_transport_set_ptr(*edd->session, edd);
 		gnutls_transport_set_pull_function(*edd->session, exmpp_gnutls_pull);
 		gnutls_transport_set_push_function(*edd->session, exmpp_gnutls_push);
