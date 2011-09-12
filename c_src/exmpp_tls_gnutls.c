@@ -21,6 +21,13 @@ struct exmpp_tls_gnutls_data {
 	int		 verify_peer;
 	char		*expected_id;
 
+	/* Options. */
+	char             *trusted_certs;
+	int		 peer_cert_required;
+	int		 accept_expired_cert;
+	int		 accept_revoked_cert;
+	int		 accept_non_trusted_cert;
+
 	gnutls_session_t *session;
 	gnutls_certificate_credentials_t *credentials;
 
@@ -80,6 +87,30 @@ exmpp_gnutls_push(gnutls_transport_ptr_t ptr, const void *buf, size_t size)
 	}
 
 	return size;
+}
+
+static int
+exmpp_gnutls_verify(gnutls_session_t session)
+{
+	unsigned int status;
+	struct exmpp_tls_gnutls_data *edd;
+
+	gnutls_certificate_verify_peers2(session, &status);
+	if (status & GNUTLS_CERT_INVALID) {
+		edd = (struct exmpp_tls_gnutls_data*) gnutls_session_get_ptr(session);
+		if ((status & GNUTLS_CERT_REVOKED) && !edd->accept_revoked_cert) {
+			return status;
+		}
+		if ((status & (GNUTLS_CERT_SIGNER_NOT_FOUND | GNUTLS_CERT_SIGNER_NOT_CA | GNUTLS_CERT_INSECURE_ALGORITHM))
+		    && !edd->accept_non_trusted_cert) {
+			return status;
+		}
+		if ((status & (GNUTLS_CERT_NOT_ACTIVATED | GNUTLS_CERT_EXPIRED)) && !edd->accept_expired_cert) {
+			return status;
+		}
+	}
+
+	return 0;
 }
 
 static int
@@ -156,6 +187,11 @@ exmpp_tls_gnutls_start(ErlDrvPort port, char *command)
 	edd->certificate = edd->private_key = NULL;
 	edd->verify_peer = 0;
 	edd->expected_id = NULL;
+	edd->trusted_certs = NULL;
+	edd->peer_cert_required = 0;
+	edd->accept_expired_cert = 0;
+	edd->accept_revoked_cert = 0;
+	edd->accept_non_trusted_cert = 0;
 	edd->session = NULL;
 	edd->credentials = NULL;
 	edd->input_buf = edd->output_buf = NULL;
@@ -170,12 +206,17 @@ exmpp_tls_gnutls_stop(ErlDrvData drv_data)
 	struct exmpp_tls_gnutls_data *edd;
 
 	edd = (struct exmpp_tls_gnutls_data *)drv_data;
-	if (edd->certificate != NULL)
+	if (edd->certificate != NULL) {
 		driver_free(edd->certificate);
-	if (edd->private_key != NULL)
+	}
+	if (edd->private_key != NULL) {
 		driver_free(edd->private_key);
+	}
 	if (edd->expected_id != NULL) {
 		driver_free(edd->expected_id);
+	}
+	if (edd->trusted_certs) {
+		driver_free(edd->trusted_certs);
 	}
 	if (edd->session != NULL) {
 		gnutls_deinit(*edd->session);
@@ -200,7 +241,7 @@ exmpp_tls_gnutls_control(ErlDrvData drv_data, unsigned int command,
     char *buf, int len, char **rbuf, int rlen)
 {
 	struct exmpp_tls_gnutls_data *edd;
-	int ret, index, arity, type, type_size;
+	int ret, index, arity, type, type_size, flag;
 	char atom[MAXATOMLEN];
 	size_t size;
 	long mode;
@@ -280,8 +321,62 @@ exmpp_tls_gnutls_control(ErlDrvData drv_data, unsigned int command,
 		}
 		break;
 	case COMMAND_SET_TRUSTED_CERTS:
+		index = exmpp_skip_version(buf);
+
+		/* Get auth method. */
+		ei_decode_tuple_header(buf, &index, &arity);
+		ei_decode_atom(buf, &index, atom);
+		if (strcmp(atom, "x509") != 0) {
+			/* Only X.509 is supported by this port driver. */
+			to_send = exmpp_new_xbuf();
+			if (to_send == NULL)
+				return (-1);
+			ei_x_encode_tuple_header(to_send, 2);
+			ei_x_encode_atom(to_send, "unsupported_auth_method");
+			ei_x_encode_string(to_send, atom);
+
+			COPY_AND_FREE_BUF(to_send, size, b, RET_ERROR);
+
+			break;
+		}
+
+		/* Get the filename for the trusted certificates. */
+		ei_get_type(buf, &index, &type, &type_size);
+		edd->trusted_certs = driver_alloc(type_size + 1);
+		if (edd->trusted_certs == NULL)
+			return (-1);
+		ei_decode_string(buf, &index, edd->trusted_certs);
 		break;
 	case COMMAND_SET_OPTIONS:
+		index = exmpp_skip_version(buf);
+
+		/* Get auth method. */
+		ei_decode_tuple_header(buf, &index, &arity);
+		ei_decode_atom(buf, &index, atom);
+		ei_decode_boolean(buf, &index, &flag);
+
+		if (strcmp(atom, "peer_cert_required") == 0) {
+			edd->peer_cert_required = flag;
+		} else if (strcmp(atom, "accept_expired_cert") == 0) {
+			edd->accept_expired_cert = flag;
+		} else if (strcmp(atom, "accept_non_trusted_cert") == 0) {
+			edd->accept_non_trusted_cert = flag;
+		} else if (strcmp(atom, "accept_revoked_cert") == 0){ 
+			edd->accept_revoked_cert = flag;
+		} else if (strcmp(atom, "accept_corrupted_cert") == 0) {
+			// ignore
+		} else {
+			to_send = exmpp_new_xbuf();
+			if (to_send == NULL)
+				return (-1);
+			ei_x_encode_tuple_header(to_send, 2);
+			ei_x_encode_atom(to_send, "unsupported_option");
+			ei_x_encode_atom(to_send, atom);
+
+			COPY_AND_FREE_BUF(to_send, size, b, RET_ERROR);
+
+			break;
+		}
 		break;
 	case COMMAND_PREPARE_HANDSHAKE:
 		edd->session = driver_alloc(sizeof(*edd->session));
@@ -297,6 +392,8 @@ exmpp_tls_gnutls_control(ErlDrvData drv_data, unsigned int command,
 			break;
 		}
 
+		gnutls_session_set_ptr(*edd->session, edd);
+
 		gnutls_priority_set(*edd->session, priority);
 		gnutls_transport_set_ptr(*edd->session, edd);
 		gnutls_transport_set_pull_function(*edd->session, exmpp_gnutls_pull);
@@ -308,12 +405,30 @@ exmpp_tls_gnutls_control(ErlDrvData drv_data, unsigned int command,
 		}
 		gnutls_certificate_allocate_credentials(edd->credentials);
 		if (edd->certificate != NULL && edd->private_key != NULL) {
-			gnutls_certificate_set_x509_key_file(*edd->credentials, edd->certificate, edd->private_key, GNUTLS_X509_FMT_PEM);
+			ret = gnutls_certificate_set_x509_key_file(*edd->credentials, edd->certificate,
+								   edd->private_key, GNUTLS_X509_FMT_PEM);
+			if (ret != GNUTLS_E_SUCCESS) {
+				return -1;
+			}
+		}
+		if (edd->trusted_certs != NULL) {
+			ret = gnutls_certificate_set_x509_trust_file(*edd->credentials, edd->trusted_certs,
+								     GNUTLS_X509_FMT_PEM);
+			if (ret < 0) {
+				return -1;
+			}
+		}
+		if (edd->verify_peer) {
+			gnutls_certificate_set_verify_function(*edd->credentials, exmpp_gnutls_verify);
 		}
 		gnutls_credentials_set(*edd->session, GNUTLS_CRD_CERTIFICATE, *edd->credentials);
 
-		if (edd->verify_peer) {
-			gnutls_certificate_server_set_request(*edd->session, GNUTLS_CERT_REQUEST);
+		if (edd->verify_peer && edd->mode == TLS_MODE_SERVER) {
+			if (edd->peer_cert_required) {
+				gnutls_certificate_server_set_request(*edd->session, GNUTLS_CERT_REQUIRE);
+			} else {
+				gnutls_certificate_server_set_request(*edd->session, GNUTLS_CERT_REQUEST);
+			}
 		}
 		break;
 	case COMMAND_HANDSHAKE:
