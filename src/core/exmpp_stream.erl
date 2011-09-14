@@ -662,7 +662,7 @@ standard_conditions() ->
      {'unsupported-stanza-type'},
      {'unsupported-version'},
      {'xml-not-well-formed'},
-     %% rfc3920bis
+     %% rfc6120
      {'not-well-formed'},
      {'reset'}
     ].

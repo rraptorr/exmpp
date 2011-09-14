@@ -95,7 +95,7 @@ standard_conditions() ->
      {'mechanism-too-weak'},
      {'not-authorized'},
      {'temporary-auth-failure'},
-     %% rfc3920bis
+     %% rfc6120
      {'account-disabled'},
      {'credentials-expired'},
      {'encryption-required'},
