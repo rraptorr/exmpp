@@ -21,19 +21,33 @@
 -define(NS_XML_b,                    <<"http://www.w3.org/XML/1998/namespace">>).
 -define(NS_XML_pfx,                  "xml").
 
-% Defined by XMPP Core (RFC 3920).
+% Defined by XHTML 1.0.
+-define(NS_XHTML,                    'http://www.w3.org/1999/xhtml').
+-define(NS_XHTML_s,                  "http://www.w3.org/1999/xhtml").
+-define(NS_XHTML_b,                  <<"http://www.w3.org/1999/xhtml">>).
+
+% Defined by XMPP Core (RFC 6120).
 -define(NS_XMPP,                     'http://etherx.jabber.org/streams').
 -define(NS_XMPP_s,                   "http://etherx.jabber.org/streams").
 -define(NS_XMPP_b,                   <<"http://etherx.jabber.org/streams">>).
-
 -define(NS_XMPP_pfx,                 "stream").
--define(NS_STREAM_ERRORS,            'urn:ietf:params:xml:ns:xmpp-streams').
--define(NS_TLS,                      'urn:ietf:params:xml:ns:xmpp-tls').
--define(NS_SASL,                     'urn:ietf:params:xml:ns:xmpp-sasl').
--define(NS_BIND,                     'urn:ietf:params:xml:ns:xmpp-bind').
--define(NS_STANZA_ERRORS,            'urn:ietf:params:xml:ns:xmpp-stanzas').
 
-% Defined by XMPP-IM (RFC 3921).
+-define(NS_STREAM_ERRORS,            'urn:ietf:params:xml:ns:xmpp-streams').
+-define(NS_STREAM_ERRORS_s,          "urn:ietf:params:xml:ns:xmpp-streams").
+-define(NS_STREAM_ERRORS_b,          <<"urn:ietf:params:xml:ns:xmpp-streams">>).
+-define(NS_TLS,                      'urn:ietf:params:xml:ns:xmpp-tls').
+-define(NS_TLS_s,                    "urn:ietf:params:xml:ns:xmpp-tls").
+-define(NS_TLS_b,                    <<"urn:ietf:params:xml:ns:xmpp-tls">>).
+-define(NS_SASL,                     'urn:ietf:params:xml:ns:xmpp-sasl').
+-define(NS_SASL_s,                   "urn:ietf:params:xml:ns:xmpp-sasl").
+-define(NS_SASL_b,                   <<"urn:ietf:params:xml:ns:xmpp-sasl">>).
+-define(NS_BIND,                     'urn:ietf:params:xml:ns:xmpp-bind').
+-define(NS_BIND_s,                   "urn:ietf:params:xml:ns:xmpp-bind").
+-define(NS_BIND_b,                   <<"urn:ietf:params:xml:ns:xmpp-bind">>).
+-define(NS_STANZA_ERRORS,            'urn:ietf:params:xml:ns:xmpp-stanzas').
+-define(NS_STANZA_ERRORS_s,          "urn:ietf:params:xml:ns:xmpp-stanzas").
+-define(NS_STANZA_ERRORS_b,          <<"urn:ietf:params:xml:ns:xmpp-stanzas">>).
+
 -define(NS_JABBER_CLIENT,            'jabber:client').
 -define(NS_JABBER_CLIENT_s,          "jabber:client").
 -define(NS_JABBER_CLIENT_b,          <<"jabber:client">>).
@@ -42,8 +56,12 @@
 -define(NS_JABBER_SERVER_s,          "jabber:server").
 -define(NS_JABBER_SERVER_b,          <<"jabber:server">>).
 
+% Defined by obsolete XMPP Core (RFC 3920).
 -define(NS_SESSION,                  'urn:ietf:params:xml:ns:xmpp-session').
+-define(NS_SESSION_s,                "urn:ietf:params:xml:ns:xmpp-session").
+-define(NS_SESSION_b,                <<"urn:ietf:params:xml:ns:xmpp-session">>).
 
+% Defined by XMPP-IM (RFC 6121).
 -define(NS_ROSTER,                   'jabber:iq:roster').
 -define(NS_ROSTER_s,                 "jabber:iq:roster").
 -define(NS_ROSTER_b,                 <<"jabber:iq:roster">>).
@@ -52,11 +70,6 @@
 -define(NS_E2E,                      'urn:ietf:params:xml:ns:xmpp-e2e').
 -define(NS_E2E_s,                    "urn:ietf:params:xml:ns:xmpp-e2e").
 -define(NS_E2E_b,                    <<"urn:ietf:params:xml:ns:xmpp-e2e">>).
-
-% Defined by XEP-0003: Proxy Accept Socket Service (PASS).
--define(NS_PASS,                     'jabber:iq:pass').
--define(NS_PASS_s,                   "jabber:iq:pass").
--define(NS_PASS_b,                   <<"jabber:iq:pass">>).
 
 % Defined by XEP-0004: Data Forms.
 -define(NS_DATA_FORMS,               'jabber:x:data').
@@ -67,11 +80,6 @@
 -define(NS_RPC,                      'jabber:iq:rpc').
 -define(NS_RPC_s,                    "jabber:iq:rpc").
 -define(NS_RPC_b,                    <<"jabber:iq:rpc">>).
-
-% Defined by XEP-0011: Jabber Browsing.
--define(NS_BROWSE,                   'jabber:iq:browse').
--define(NS_BROWSE_s,                 "jabber:iq:browse").
--define(NS_BROWSE_b,                 <<"jabber:iq:browse">>).
 
 % Defined by XEP-0012: Last Activity.
 -define(NS_LAST_ACTIVITY,            'jabber:iq:last').
@@ -493,16 +501,12 @@
 -define(NS_PUBSUB_SUBSCRIPTION_NOTIFICATIONS_b,
   <<"http://jabber.org/protocol/pubsub#subscription-notifications">>).
 
-
-
 % Defined by XEP-0065: SOCKS5 Bytestreams.
 -define(NS_BYTESTREAMS,              'http://jabber.org/protocol/bytestreams').
 -define(NS_BYTESTREAMS_s,            "http://jabber.org/protocol/bytestreams").
 -define(NS_BYTESTREAMS_b,            <<"http://jabber.org/protocol/bytestreams">>).
 
 % Defined by XEP-0066: Out of Band Data.
-
-%% How about NS_OOB instead ?
 -define(NS_OOBD_IQ,                  'jabber:iq:oob').
 -define(NS_OOBD_X,                   'jabber:x:oob').
 
@@ -539,14 +543,13 @@
 
 % Defined by XEP-0078: Non-SASL Authentication.
 -define(NS_LEGACY_AUTH,              'jabber:iq:auth').
--define(NS_LEGACY_AUTH_FEAT,         'http://jabber.org/features/iq-aut').
+-define(NS_LEGACY_AUTH_FEAT,         'http://jabber.org/features/iq-auth').
 
 -define(NS_LEGACY_AUTH_s,            "jabber:iq:auth").
--define(NS_LEGACY_AUTH_FEAT_s,       "http://jabber.org/features/iq-aut").
+-define(NS_LEGACY_AUTH_FEAT_s,       "http://jabber.org/features/iq-auth").
 
 -define(NS_LEGACY_AUTH_b,            <<"jabber:iq:auth">>).
--define(NS_LEGACY_AUTH_FEAT_b,       <<"http://jabber.org/features/iq-aut">>).
-
+-define(NS_LEGACY_AUTH_FEAT_b,       <<"http://jabber.org/features/iq-auth">>).
 
 % Defined by XEP-0079: Advanced Message Processing.
 -define(NS_AMP,                      'http://jabber.org/protocol/amp').
@@ -585,12 +588,12 @@
 -define(NS_CHATSTATES_s,             "http://jabber.org/protocol/chatstates").
 -define(NS_CHATSTATES_b,             <<"http://jabber.org/protocol/chatstates">>).
 
-% Defined by XEP-0090: Entity Time.
+% Defined by XEP-0090: Legacy Entity Time.
 -define(NS_TIME_OLD,                 'jabber:iq:time').
 -define(NS_TIME_OLD_s,               "jabber:iq:time").
 -define(NS_TIME_OLD_b,               <<"jabber:iq:time">>).
 
-% Defined by XEP-0091: Delayed Delivery.
+% Defined by XEP-0091: Legacy Delayed Delivery.
 -define(NS_DELAY_OLD,                'jabber:x:delay').
 -define(NS_DELAY_OLD_s,              "jabber:x:delay").
 -define(NS_DELAY_OLD_b,              <<"jabber:x:delay">>).
@@ -610,7 +613,7 @@
 -define(NS_SI_s,                     "http://jabber.org/protocol/si").
 -define(NS_SI_b,                     <<"http://jabber.org/protocol/si">>).
 
-% Defined by XEP-0096: File Transfer.
+% Defined by XEP-0096: SI File Transfer.
 -define(NS_FILE_TRANSFERT,
   'http://jabber.org/protocol/si/profile/file-transfer').
 -define(NS_FILE_TRANSFERT_s,
@@ -632,11 +635,6 @@
 -define(NS_USER_ACTIVITY,            'http://jabber.org/protocol/activity').
 -define(NS_USER_ACTIVITY_s,          "http://jabber.org/protocol/activity").
 -define(NS_USER_ACTIVITY_b,          <<"http://jabber.org/protocol/activity">>).
-
-% Defined by XEP-0112: User Physical Location (Deferred).
--define(NS_USER_PHYSLOC,             'http://jabber.org/protocol/physloc').
--define(NS_USER_PHYSLOC_s,           "http://jabber.org/protocol/physloc").
--define(NS_USER_PHYSLOC_b,           <<"http://jabber.org/protocol/physloc">>).
 
 % Defined by XEP-0114: Jabber Component Protocol.
 -define(NS_COMPONENT_ACCEPT,         'jabber:component:accept').
@@ -666,11 +664,7 @@
 -define(NS_DATA_FORMS_VALIDATE_b,
   <<"http://jabber.org/protocol/xdata-validate">>).
 
-% Defined by XEP-0124: Bidirectional-streams Over Synchronous HTTP.
--define(NS_BOSH,                     'urn:xmpp:xbosh').
--define(NS_BOSH_s,                   "urn:xmpp:xbosh").
--define(NS_BOSH_b,                   <<"urn:xmpp:xbosh">>).
-
+% Defined by XEP-0124: Bidirectional-streams Over Synchronous HTTP (BOSH).
 -define(NS_HTTP_BIND,                'http://jabber.org/protocol/httpbind').
 -define(NS_HTTP_BIND_s,              "http://jabber.org/protocol/httpbind").
 -define(NS_HTTP_BIND_b,              <<"http://jabber.org/protocol/httpbind">>).
@@ -680,7 +674,7 @@
 -define(NS_WAITING_LIST_s,           "http://jabber.org/protocol/waitinglist").
 -define(NS_WAITING_LIST_b,           <<"http://jabber.org/protocol/waitinglist">>).
 
-% Defined by XEP-0131: Stanza Headers and Internet Metadata (SHIM).
+% Defined by XEP-0131: Stanza Headers and Internet Metadata.
 -define(NS_SHIM,                     'http://jabber.org/protocol/shim').
 -define(NS_SHIM_s,                   "http://jabber.org/protocol/shim").
 -define(NS_SHIM_b,                   <<"http://jabber.org/protocol/shim">>).
@@ -733,85 +727,51 @@
 -define(NS_VCARD_UPDATE_s,           "vcard-temp:x:update").
 -define(NS_VCARD_UPDATE_b,           <<"vcard-temp:x:update">>).
 
-% Defined by XEP-0154: User Profile.
--define(NS_USER_PROFILE,             'urn:xmpp:tmp:profile').
--define(NS_USER_PROFILE_s,           "urn:xmpp:tmp:profile").
--define(NS_USER_PROFILE_b,           <<"urn:xmpp:tmp:profile">>).
-
-% Defined by XEP-0155: Stanza Session Negotiation.
--define(NS_SSN,                      'urn:xmpp:ssn').
--define(NS_SSN_s,                    "urn:xmpp:ssn").
--define(NS_SSN_b,                    <<"urn:xmpp:ssn">>).
-
 % Defined by XEP-0157: Contact Addresses for XMPP Services.
 -define(NS_SERVERINFO,               'http://jabber.org/network/serverinfo').
 -define(NS_SERVERINFO_s,             "http://jabber.org/network/serverinfo").
 -define(NS_SERVERINFO_b,             <<"http://jabber.org/network/serverinfo">>).
 
 % Defined by XEP-0158: CAPTCHA Forms.
-
 -define(NS_CAPTCHA,                  'urn:xmpp:captcha').
 -define(NS_CAPTCHA_s,                "urn:xmpp:captcha").
 -define(NS_CAPTCHA_b,                <<"urn:xmpp:captcha">>).
-
-%% Deferred : XEP-0158: Robot Challenges
--define(NS_ROBOT_CHALLENGE,          'urn:xmpp:tmp:challenge').
--define(NS_ROBOT_CHALLENGE_s,        "urn:xmpp:tmp:challenge").
--define(NS_ROBOT_CHALLENGE_b,        <<"urn:xmpp:tmp:challenge">>).
 
 % Defined by XEP-0160: Best Practices for Handling Offline Messages.
 -define(NS_MSGOFFLINE,               'msgoffline').
 -define(NS_MSGOFFLINE_s,             "msgoffline").
 -define(NS_MSGOFFLINE_b,             <<"msgoffline">>).
 
-% Defined by XEP-0161: Abuse Reporting.
--define(NS_ABUSE_REPORTING,          'urn:xmpp:tmp:abuse').
--define(NS_ABUSE_REPORTING_s,        "urn:xmpp:tmp:abuse").
--define(NS_ABUSE_REPORTING_b,        <<"urn:xmpp:tmp:abuse">>).
-
 % Defined by XEP-0166: Jingle.
--define(NS_JINGLE,                   'urn:xmpp:tmp:jingle').
--define(NS_JINGLE_ERRORS,            'urn:xmpp:tmp:jingle:errors').
+-define(NS_JINGLE_1,                 'urn:xmpp:jingle:1').
+-define(NS_JINGLE_ERRORS_1,          'urn:xmpp:jingle:errors:1').
 
--define(NS_JINGLE_s,                 "urn:xmpp:tmp:jingle").
--define(NS_JINGLE_ERRORS_s,          "urn:xmpp:tmp:jingle:errors").
+-define(NS_JINGLE_1_s,               "urn:xmpp:jingle:1").
+-define(NS_JINGLE_ERRORS_1_s,        "urn:xmpp:jingle:errors:1").
 
--define(NS_JINGLE_b,                 <<"urn:xmpp:tmp:jingle">>).
--define(NS_JINGLE_ERRORS_b,          <<"urn:xmpp:tmp:jingle:errors">>).
+-define(NS_JINGLE_1_b,               <<"urn:xmpp:jingle:1">>).
+-define(NS_JINGLE_ERRORS_1_b,        <<"urn:xmpp:jingle:errors:1">>).
 
 % Defined by XEP-0167: Jingle RTP Sessions.
--define(NS_JINGLE_RPT,               'urn:xmpp:tmp:jingle:apps:rtp').
--define(NS_JINGLE_RPT_INFO,          'urn:xmpp:tmp:jingle:apps:rtp:info').
+-define(NS_JINGLE_RTP_1,             'urn:xmpp:jingle:apps:rtp:1').
+-define(NS_JINGLE_RTP_ERRORS_1,      'urn:xmpp:jingle:apps:rtp:errors:1').
+-define(NS_JINGLE_RTP_INFO_1,        'urn:xmpp:jingle:apps:rtp:info:1').
 
--define(NS_JINGLE_RPT_s,             "urn:xmpp:tmp:jingle:apps:rtp").
--define(NS_JINGLE_RPT_INFO_s,        "urn:xmpp:tmp:jingle:apps:rtp:info").
+-define(NS_JINGLE_RTP_1_s,           "urn:xmpp:jingle:apps:rtp:1").
+-define(NS_JINGLE_RTP_ERRORS_1_s,    "urn:xmpp:jingle:apps:rtp:errors:1").
+-define(NS_JINGLE_RTP_INFO_1_s,      "urn:xmpp:jingle:apps:rtp:info:1").
 
--define(NS_JINGLE_RPT_b,             <<"urn:xmpp:tmp:jingle:apps:rtp">>).
--define(NS_JINGLE_RPT_INFO_b,        <<"urn:xmpp:tmp:jingle:apps:rtp:info">>).
-
-% Defined by XEP-0168: Resource Application Priority.
--define(NS_RAP,
-  'http://www.xmpp.org/extensions/xep-0168.html#ns').
--define(NS_RAP_ROUTE,
-  'http://www.xmpp.org/extensions/xep-0168.html#ns-route').
-
--define(NS_RAP_s,
-  "http://www.xmpp.org/extensions/xep-0168.html#ns").
--define(NS_RAP_ROUTE_s,
-  "http://www.xmpp.org/extensions/xep-0168.html#ns-route").
-
--define(NS_RAP_b,
-  <<"http://www.xmpp.org/extensions/xep-0168.html#ns">>).
--define(NS_RAP_ROUTE_b,
-  <<"http://www.xmpp.org/extensions/xep-0168.html#ns-route">>).
+-define(NS_JINGLE_RTP_1_b,           <<"urn:xmpp:jingle:apps:rtp:1">>).
+-define(NS_JINGLE_RTP_ERRORS_1_b,    <<"urn:xmpp:jingle:apps:rtp:errors:1">>).
+-define(NS_JINGLE_RTP_INFO_1_b,      <<"urn:xmpp:jingle:apps:rtp:info:1">>).
 
 % Defined by XEP-0171: Language Translation.
 -define(NS_LANG_TRANS,               'urn:xmpp:langtrans').
--define(NS_LANG_TRANS_ITEMS,         'urn:xmpp:langtrans#items').
+-define(NS_LANG_TRANS_ITEMS,         'urn:xmpp:langtrans:items').
 -define(NS_LANG_TRANS_s,             "urn:xmpp:langtrans").
--define(NS_LANG_TRANS_ITEMS_s,       "urn:xmpp:langtrans#items").
+-define(NS_LANG_TRANS_ITEMS_s,       "urn:xmpp:langtrans:items").
 -define(NS_LANG_TRANS_b,             <<"urn:xmpp:langtrans">>).
--define(NS_LANG_TRANS_ITEMS_b,       <<"urn:xmpp:langtrans#items">>).
+-define(NS_LANG_TRANS_ITEMS_b,       <<"urn:xmpp:langtrans:items">>).
 
 % Defined by XEP-0172: User Nickname.
 -define(NS_USER_NICKNAME,            'http://jabber.org/protocol/nick').
@@ -819,66 +779,19 @@
 -define(NS_USER_NICKNAME_b,          <<"http://jabber.org/protocol/nick">>).
 
 % Defined by XEP-0176: Jingle ICE-UDP Transport Method.
--define(NS_JINGLE_ICE_UDP,           'urn:xmpp:tmp:jingle:transports:ice-udp').
--define(NS_JINGLE_ICE_UDP_s,         "urn:xmpp:tmp:jingle:transports:ice-udp").
--define(NS_JINGLE_ICE_UDP_b,         <<"urn:xmpp:tmp:jingle:transports:ice-udp">>).
+-define(NS_JINGLE_ICE_UDP_1,         'urn:xmpp:jingle:transports:ice-udp:1').
+-define(NS_JINGLE_ICE_UDP_1_s,       "urn:xmpp:jingle:transports:ice-udp:1").
+-define(NS_JINGLE_ICE_UDP_1_b,       <<"urn:xmpp:jingle:transports:ice-udp:1">>).
 
 % Defined by XEP-0177: Jingle Raw UDP Transport Method.
--define(NS_JINGLE_RAW_UDP,
-  'urn:xmpp:tmp:jingle:transports:raw-udp').
--define(NS_JINGLE_RAW_UDP_INFO,
-  'urn:xmpp:tmp:jingle:transports:raw-udp:info').
--define(NS_JINGLE_RAW_UDP_s,
-  "urn:xmpp:tmp:jingle:transports:raw-udp").
--define(NS_JINGLE_RAW_UDP_INFO_s,
-  "urn:xmpp:tmp:jingle:transports:raw-udp:info").
--define(NS_JINGLE_RAW_UDP_b,
-  <<"urn:xmpp:tmp:jingle:transports:raw-udp">>).
--define(NS_JINGLE_RAW_UDP_INFO_b,
-  <<"urn:xmpp:tmp:jingle:transports:raw-udp:info">>).
+-define(NS_JINGLE_RAW_UDP_1,         'urn:xmpp:jingle:transports:raw-udp:1').
+-define(NS_JINGLE_RAW_UDP_1_s,       "urn:xmpp:jingle:transports:raw-udp:1").
+-define(NS_JINGLE_RAW_UDP_1_b,       <<"urn:xmpp:jingle:transports:raw-udp:1">>).
 
-% Defined by XEP-0181: Jingle DTMF.
--define(NS_JINGLE_DTMF_0,            'urn:xmpp:jingle:dtmf:0').
--define(NS_JINGLE_DTMF_0_s,          "urn:xmpp:jingle:dtmf:0").
--define(NS_JINGLE_DTMF_0_b,          <<"urn:xmpp:jingle:dtmf:0">>).
-
-%% Deferred
--define(NS_JINGLE_DTMF,              'urn:xmpp:tmp:jingle:dtmf').
--define(NS_JINGLE_DTMF_s,            "urn:xmpp:tmp:jingle:dtmf").
--define(NS_JINGLE_DTMF_b,            <<"urn:xmpp:tmp:jingle:dtmf">>).
-
-% Defined by XEP-0184: Message Receipts.
+% Defined by XEP-0184: Message Delivery Receipts.
 -define(NS_RECEIPTS,                 'urn:xmpp:receipts').
 -define(NS_RECEIPTS_s,               "urn:xmpp:receipts").
 -define(NS_RECEIPTS_b,               <<"urn:xmpp:receipts">>).
-
-% Defined by XEP-0186: Invisible Command.
--define(NS_INVISIBLE_COMMAND_0,      'urn:xmpp:invisible:0').
--define(NS_INVISIBLE_COMMAND_0_s,    "urn:xmpp:invisible:0").
--define(NS_INVISIBLE_COMMAND_0_b,    <<"urn:xmpp:invisible:0">>).
-
-%% Deferred
--define(NS_INVISIBLE_COMMAND,        'urn:xmpp:tmp:invisible').
--define(NS_INVISIBLE_COMMAND_s,      "urn:xmpp:tmp:invisible").
--define(NS_INVISIBLE_COMMAND_b,      <<"urn:xmpp:tmp:invisible">>).
-
-% Defined by XEP-0189: Public Key Publishing.
--define(NS_PUBKEY_1,                 'urn:xmpp:pubkey:1').
--define(NS_PUBKEY_1_s,               "urn:xmpp:pubkey:1").
--define(NS_PUBKEY_1_b,               <<"urn:xmpp:pubkey:1">>).
-
--define(NS_ATTEST_1,                 'urn:xmpp:attest:1').
--define(NS_ATTEST_1_s,               "urn:xmpp:attest:1").
--define(NS_ATTEST_1_b,               <<"urn:xmpp:attest:1">>).
-
--define(NS_REVOKE_1,                 'urn:xmpp:revoke:1').
--define(NS_REVOKE_1_s,               "urn:xmpp:revoke:1").
--define(NS_REVOKE_1_b,               <<"urn:xmpp:revoke:1">>).
-
-%% Deferred
--define(NS_PUBKEY_TMP,               'urn:xmpp:tmp:pubkey').
--define(NS_PUBKEY_TMP_s,             "urn:xmpp:tmp:pubkey").
--define(NS_PUBKEY_TMP_b,             <<"urn:xmpp:tmp:pubkey">>).
 
 % Defined by XEP-0191: Simple Communications Blocking.
 -define(NS_BLOCKING,                 'urn:xmpp:blocking').
@@ -888,75 +801,10 @@
 -define(NS_BLOCKING_b,               <<"urn:xmpp:blocking">>).
 -define(NS_BLOCKING_ERRORS_b,        <<"urn:xmpp:blocking:errors">>).
 
-% Defined by XEP-0194: User Chatting.
-
--define(NS_USER_CHATTING_0,          'urn:xmpp:chatting:0').
--define(NS_USER_CHATTING_0_s,        "urn:xmpp:chatting:0").
--define(NS_USER_CHATTING_0_b,        <<"urn:xmpp:chatting:0">>).
-
-%% Deferred
--define(NS_USER_CHATTING,
-  'http://www.xmpp.org/extensions/xep-0194.html#ns').
--define(NS_USER_CHATTING_s,
-  "http://www.xmpp.org/extensions/xep-0194.html#ns").
--define(NS_USER_CHATTING_b,
-  <<"http://www.xmpp.org/extensions/xep-0194.html#ns">>).
-
-% Defined by XEP-0195: User Browsing.
--define(NS_USER_BROWSING_0,          'urn:xmpp:browsing:0').
--define(NS_USER_BROWSING_0_s,        "urn:xmpp:browsing:0").
--define(NS_USER_BROWSING_0_b,        <<"urn:xmpp:browsing:0">>).
-
-%% Deferred
--define(NS_USER_BROWSING,
-  'http://www.xmpp.org/extensions/xep-0195.html#ns').
--define(NS_USER_BROWSING_s,
-  "http://www.xmpp.org/extensions/xep-0195.html#ns").
--define(NS_USER_BROWSING_b,
-  <<"http://www.xmpp.org/extensions/xep-0195.html#ns">>).
-
-% Defined by XEP-0196: User Gaming.
--define(NS_USER_GAMING_0,            'urn:xmpp:gaming:0').
--define(NS_USER_GAMING_0_s,          "urn:xmpp:gaming:0").
--define(NS_USER_GAMING_0_b,          <<"urn:xmpp:gaming:0">>).
-
-%% Deferred
--define(NS_USER_GAMING,
-  'http://www.xmpp.org/extensions/xep-0196.html#ns').
--define(NS_USER_GAMING_s,
-  "http://www.xmpp.org/extensions/xep-0196.html#ns").
--define(NS_USER_GAMING_b,
-  <<"http://www.xmpp.org/extensions/xep-0196.html#ns">>).
-
-% Defined by XEP-0197: User Viewing.
--define(NS_USER_VIEWING_0,           'urn:xmpp:viewing:0').
--define(NS_USER_VIEWING_0_s,         "urn:xmpp:viewing:0").
--define(NS_USER_VIEWING_0_b,         <<"urn:xmpp:viewing:0">>).
-
-%% Deferred
--define(NS_USER_VIEWING,
-  'http://www.xmpp.org/extensions/xep-0197.html#ns').
--define(NS_USER_VIEWING_s,
-  "http://www.xmpp.org/extensions/xep-0197.html#ns").
-
-% Defined by XEP-0198: Stanza Acknowledgements.
--define(NS_STREAM_MGNT_2,            'urn:xmpp:sm:2').
--define(NS_STREAM_MGNT_2_s,          "urn:xmpp:sm:2").
--define(NS_STREAM_MGNT_2_b,          <<"urn:xmpp:sm:2">>).
-
-%% Deferred
--define(NS_STREAM_MGNT_1,            'urn:xmpp:sm:1').
--define(NS_STREAM_MGNT_1_s,          "urn:xmpp:sm:1").
--define(NS_STREAM_MGNT_1_b,          <<"urn:xmpp:sm:1">>).
-
--define(NS_STREAM_MGNT_0,            'urn:xmpp:sm:0').
--define(NS_STREAM_MGNT_0_s,          "urn:xmpp:sm:0").
--define(NS_STREAM_MGNT_0_b,          <<"urn:xmpp:sm:0">>).
-
--define(NS_STANZA_ACK,
-  'http://www.xmpp.org/extensions/xep-0198.html#ns').
--define(NS_STANZA_ACK_s,
-  "http://www.xmpp.org/extensions/xep-0198.html#ns").
+% Defined by XEP-0198: Stream Management.
+-define(NS_STREAM_MGNT_3,            'urn:xmpp:sm:3').
+-define(NS_STREAM_MGNT_3_s,          "urn:xmpp:sm:3").
+-define(NS_STREAM_MGNT_3_b,          <<"urn:xmpp:sm:3">>).
 
 % Defined by XEP-0199: XMPP Ping.
 -define(NS_PING,                     'urn:xmpp:ping').
@@ -974,36 +822,10 @@
 -define(NS_DELAY_b,                  <<"urn:xmpp:delay">>).
 
 % Defined by XEP-0206: XMPP Over BOSH.
--define(NS_XBOSH,                    'urn:xmpp:xbosh').
--define(NS_XBOSH_s,                  "urn:xmpp:xbosh").
--define(NS_XBOSH_b,                  <<"urn:xmpp:xbosh">>).
--define(NS_XBOSH_pfx,                "xmpp").
-
-% Defined by XEP-0208: Bootstrapping Implementation of Jingle.
--define(NS_JINGLE_BOOTSTRAPING,
-  'http://www.xmpp.org/extensions/xep-0208.html#ns').
--define(NS_JINGLE_BOOTSTRAPING_s,
-  "http://www.xmpp.org/extensions/xep-0208.html#ns").
--define(NS_JINGLE_BOOTSTRAPING_b,
-  <<"http://www.xmpp.org/extensions/xep-0208.html#ns">>).
-
-% Defined by XEP-0209: Metacontacts.
--define(NS_METACONTACTS,             'storage:metacontacts').
--define(NS_METACONTACTS_s,           "storage:metacontacts").
--define(NS_METACONTACTS_b,           <<"storage:metacontacts">>).
-
-% Defined by XEP-0215: External Service Discovery.
--define(NS_EXTERNAL_DISCO_0,           'urn:xmpp:extdisco:0').
--define(NS_EXTERNAL_DISCO_0_s,         "urn:xmpp:extdisco:0").
--define(NS_EXTERNAL_DISCO_0_b,         <<"urn:xmpp:extdisco:0">>).
-
-%% Deferred
--define(NS_EXTERNAL_DISCO,
-  'http://www.xmpp.org/extensions/xep-0215.html#ns').
--define(NS_EXTERNAL_DISCO_s,
-  "http://www.xmpp.org/extensions/xep-0215.html#ns").
--define(NS_EXTERNAL_DISCO_b,
-  <<"http://www.xmpp.org/extensions/xep-0215.html#ns">>).
+-define(NS_BOSH,                     'urn:xmpp:xbosh').
+-define(NS_BOSH_s,                   "urn:xmpp:xbosh").
+-define(NS_BOSH_b,                   <<"urn:xmpp:xbosh">>).
+-define(NS_BOSH_pfx,                 "xmpp").
 
 % Defined by XEP-0220: Server Dialback.
 -define(NS_DIALBACK,                 'jabber:server:dialback').
@@ -1015,141 +837,44 @@
 -define(NS_DIALBACK_FEAT_b,          <<"urn:xmpp:features:dialback">>).
 
 % Defined by XEP-0221: Data Forms Media Element.
-%% How about NS_DATA ?
 -define(NS_DATA_FORMS_MEDIA,         'urn:xmpp:media-element').
 -define(NS_DATA_FORMS_MEDIA_s,       "urn:xmpp:media-element").
 -define(NS_DATA_FORMS_MEDIA_b,       <<"urn:xmpp:media-element">>).
-
-%% Deferred
--define(NS_DATA_FORMS_MEDIA_TMP,     'urn:xmpp:tmp:media-element').
--define(NS_DATA_FORMS_MEDIA_TMP_s,   "urn:xmpp:tmp:media-element").
--define(NS_DATA_FORMS_MEDIA_TMP_b,   <<"urn:xmpp:tmp:media-element">>).
 
 % Defined by XEP-0224: Attention.
 -define(NS_ATTENTION_0,              'urn:xmpp:attention:0').
 -define(NS_ATTENTION_0_s,            "urn:xmpp:attention:0").
 -define(NS_ATTENTION_0_b,            <<"urn:xmpp:attention:0">>).
 
-%% Deferred
--define(NS_ATTENTION,
-  'http://www.xmpp.org/extensions/xep-0224.html#ns').
--define(NS_ATTENTION_s,
-  "http://www.xmpp.org/extensions/xep-0224.html#ns").
--define(NS_ATTENTION_b,
-  <<"http://www.xmpp.org/extensions/xep-0224.html#ns">>).
-
-% Defined by XEP-0225: Component Connections.
--define(NS_COMPONENT_CONNECTION_0,   'urn:xmpp:component:0').
--define(NS_COMPONENT_CONNECTION_0_s, "urn:xmpp:component:0").
--define(NS_COMPONENT_CONNECTION_0_b, <<"urn:xmpp:component:0">>).
-
-%% Deferred
--define(NS_COMPONENT_CONNECTION,     'urn:xmpp:tmp:component').
--define(NS_COMPONENT_CONNECTION_s,   "urn:xmpp:tmp:component").
--define(NS_COMPONENT_CONNECTION_b,   <<"urn:xmpp:tmp:component">>).
-
 % Defined by XEP-0227: Portable Import/Export Format for XMPP-IM Servers.
--define(NS_SERVER_IMPORT_EXPORT,
-  'http://www.xmpp.org/extensions/xep-0227.html#ns').
--define(NS_SERVER_IMPORT_EXPORT_s,
-  "http://www.xmpp.org/extensions/xep-0227.html#ns").
--define(NS_SERVER_IMPORT_EXPORT_b,
-  <<"http://www.xmpp.org/extensions/xep-0227.html#ns">>).
+-define(NS_PIE_0,                   'urn:xmpp:pie:0').
+-define(NS_PIE_0_s,                 "urn:xmpp:pie:0").
+-define(NS_PIE_0_b,                 <<"urn:xmpp:pie:0">>).
 
-% Defined by XEP-0231: Data Element.
+% Defined by XEP-0231: Bits of Binary.
 -define(NS_BOB,                      'urn:xmpp:bob').
 -define(NS_BOB_s,                    "urn:xmpp:bob").
 -define(NS_BOB_b,                    <<"urn:xmpp:bob">>).
 
-%% Deferred
--define(NS_DATA,                     'urn:xmpp:tmp:data-element').
--define(NS_DATA_s,                   "urn:xmpp:tmp:data-element").
--define(NS_DATA_b,                   <<"urn:xmpp:tmp:data-element">>).
-
-% Defined by XEP-0233: Use of Domain-Based Service Names in XMPP SASL
-% Negotiation.
--define(NS_DOMAIN_BASED_NAME,        'urn:xmpp:tmp:domain-based-name').
--define(NS_DOMAIN_BASED_NAME_s,      "urn:xmpp:tmp:domain-based-name").
--define(NS_DOMAIN_BASED_NAME_B,      <<"urn:xmpp:tmp:domain-based-name">>).
+% Defined by XEP-0233: Domain-Based Service Names in XMPP SASL Negotiation.
+-define(NS_DOMAIN_BASED_NAME_1,      'urn:xmpp:domain-based-name:1').
+-define(NS_DOMAIN_BASED_NAME_1_s,    "urn:xmpp:domain-based-name:1").
+-define(NS_DOMAIN_BASED_NAME_1_B,    <<"urn:xmpp:domain-based-name:1">>).
 
 % Defined by XEP-0234: Jingle File Transfer.
--define(NS_JINGLE_FT_1,              'urn:xmpp:jingle:apps:file-transfer:1').
--define(NS_JINGLE_FT_1_s,            "urn:xmpp:jingle:apps:file-transfer:1").
--define(NS_JINGLE_FT_1_b,            <<"urn:xmpp:jingle:apps:file-transfer:1">>).
-
-%% Deferred
--define(NS_JINGLE_FILE_TRANSFERT,    'urn:xmpp:tmp:jingle:apps:file-transfer').
--define(NS_JINGLE_FILE_TRANSFERT_s,  "urn:xmpp:tmp:jingle:apps:file-transfer").
--define(NS_JINGLE_FILE_TRANSFERT_b,  <<"urn:xmpp:tmp:jingle:apps:file-transfer">>).
-
-% Defined by XEP-0235: Authorization Tokens.
--define(NS_OAUTH_0,                  'urn:xmpp:oauth:0').
--define(NS_OAUTH_0_s,                "urn:xmpp:oauth:0").
--define(NS_OAUTH_0_b,                <<"urn:xmpp:oauth:0">>).
-
--define(NS_OAUTH_ERRORS_0,           'urn:xmpp:oauth:0:errors').
--define(NS_OAUTH_ERRORS_0_s,         "urn:xmpp:oauth:0:errors").
--define(NS_OAUTH_ERRORS_0_b,         <<"urn:xmpp:oauth:0:errors">>).
-
-%% Deferred : XEP-0235: Authorization Tokens.
--define(NS_AUTH_TOKEN,               'urn:xmpp:tmp:auth-token').
--define(NS_AUTH_TOKEN_s,             "urn:xmpp:tmp:auth-token").
--define(NS_AUTH_TOKEN_b,             <<"urn:xmpp:tmp:auth-token">>).
+-define(NS_JINGLE_FT_3,              'urn:xmpp:jingle:apps:file-transfer:3').
+-define(NS_JINGLE_FT_3_s,            "urn:xmpp:jingle:apps:file-transfer:3").
+-define(NS_JINGLE_FT_3_b,            <<"urn:xmpp:jingle:apps:file-transfer:3">>).
 
 % Defined by XEP-0237: Roster Versioning.
 -define(NS_ROSTER_VER,               'urn:xmpp:features:rosterver').
 -define(NS_ROSTER_VER_s,             "urn:xmpp:features:rosterver").
 -define(NS_ROSTER_VER_b,             <<"urn:xmpp:features:rosterver">>).
 
-%% Deferred : XEP-0237: Roster Sequencing.
--define(NS_ROSTER_SEQ,               'urn:xmpp:tmp:roster-sequencing').
--define(NS_ROSTER_SEQ_s,             "urn:xmpp:tmp:roster-sequencing").
--define(NS_ROSTER_SEQ_b,             <<"urn:xmpp:tmp:roster-sequencing">>).
-
-% Defined by XEP-0244: IO Data.
--define(NS_IO_DATA_TMP,              'urn:xmpp:tmp:io-data').
--define(NS_IO_DATA_TMP_s,            "urn:xmpp:tmp:io-data").
--define(NS_IO_DATA_TMP_b,            <<"urn:xmpp:tmp:io-data">>).
-
-% Defined by XEP-0247: Jingle XML Streams.
--define(NS_JINGLE_XML_STREAM_0,      'urn:xmpp:jingle:apps:xmlstream:0').
--define(NS_JINGLE_XML_STREAM_0_s,    "urn:xmpp:jingle:apps:xmlstream:0").
--define(NS_JINGLE_XML_STREAM_0_b,    <<"urn:xmpp:jingle:apps:xmlstream:0">>).
-
-% Deferred
--define(NS_JINGLE_XML_STREAM,        'urn:xmpp:tmp:jingle:apps:xmlstream').
--define(NS_JINGLE_XML_STREAM_s,      "urn:xmpp:tmp:jingle:apps:xmlstream").
--define(NS_JINGLE_XML_STREAM_b,      <<"urn:xmpp:tmp:jingle:apps:xmlstream">>).
-
 % Defined by XEP-0249: Direct MUC Invitations.
 -define(NS_JABBER_X_CONF,            'jabber:x:conference').
 -define(NS_JABBER_X_CONF_s,          "jabber:x:conference").
 -define(NS_JABBER_X_CONF_b,          <<"jabber:x:conference">>).
-
-% Defined by XEP-0251: Jingle Session Transfer.
--define(NS_JINGLE_TRANSFER_0,        'urn:xmpp:jingle:transfer:0').
--define(NS_JABBER_TRANSFER_0_s,      "urn:xmpp:jingle:transfer:0").
--define(NS_JABBER_TRANSFER_0_b,      <<"urn:xmpp:jingle:transfer:0">>).
-
-% Defined by XEP-0253: PubSub Chaining.
--define(NS_PUBSUB_CHAINING,          'http://jabber.org/protocol/pubsub#chaining').
--define(NS_PUBSUB_CHAINING_s,        "http://jabber.org/protocol/pubsub#chaining").
--define(NS_PUBSUB_CHAINING_b,        <<"http://jabber.org/protocol/pubsub#chaining">>).
-
-% Defined by XEP-0254: PubSub Queueing.
--define(NS_PUBSUB_QUEUEING_0,        'urn:xmpp:pubsub:queueing:0').
--define(NS_PUBSUB_QUEUEING_0_s,      "urn:xmpp:pubsub:queueing:0").
--define(NS_PUBSUB_QUEUEING_0_b,      <<"urn:xmpp:pubsub:queueing:0">>).
-
-% Defined by XEP-0255: Location Query.
--define(NS_LOCATION_QUERY_0,         'urn:xmpp:locationquery:0').
--define(NS_LOCATION_QUERY_0_s,       "urn:xmpp:locationquery:0").
--define(NS_LOCATION_QUERY_0_b,       <<"urn:xmpp:locationquery:0">>).
-
-% Defined by XEP-0257: Client Certificate Management for SASL EXTERNAL.
--define(NS_SASL_CERT_0,              'urn:xmpp:saslcert:0').
--define(NS_SASL_CERT_0_s,            "urn:xmpp:saslcert:0").
--define(NS_SASL_CERT_0_b,            <<"urn:xmpp:saslcert:0">>).
 
 % Defined by XEP-0258: Security Labels in XMPP.
 -define(NS_SEC_LABEL_0,              'urn:xmpp:sec-label:0').
@@ -1164,11 +889,6 @@
 -define(NS_SEC_LABEL_ESS_0_s,        "urn:xmpp:sec-label:ess:0").
 -define(NS_SEC_LABEL_ESS_0_b,        <<"urn:xmpp:sec-label:ess:0">>).
 
-% Defined by XEP-0259: Message Mine-ing.
--define(NS_MINE_TMP_0,               'urn:xmpp:tmp:mine:0').
--define(NS_MINE_TMP_0_s,             "urn:xmpp:tmp:mine:0").
--define(NS_MINE_TMP_0_b,             <<"urn:xmpp:tmp:mine:0">>).
-
 % Defined by XEP-0260: Jingle SOCKS5 Bytestreams Transport Method.
 -define(NS_JINGLE_TRANSPORTS_S5B_1,
   'urn:xmpp:jingle:transports:s5b:1').
@@ -1178,60 +898,25 @@
   <<"urn:xmpp:jingle:transports:s5b:1">>).
 
 % Defined by XEP-0261: Jingle In-Band Bytestreams Transport Method.
--define(NS_JINGLE_TRANSPORTS_S5B_0,
-  'urn:xmpp:jingle:transports:s5b:0').
--define(NS_JINGLE_TRANSPORTS_S5B_0_s,
-  "urn:xmpp:jingle:transports:s5b:0").
--define(NS_JINGLE_TRANSPORTS_S5B_0_b,
-  <<"urn:xmpp:jingle:transports:s5b:0">>).
+-define(NS_JINGLE_TRANSPORTS_IBB_1,
+  'urn:xmpp:jingle:transports:ibb:1').
+-define(NS_JINGLE_TRANSPORTS_IBB_1_s,
+  "urn:xmpp:jingle:transports:ibb:1").
+-define(NS_JINGLE_TRANSPORTS_IBB_1_b,
+  <<"urn:xmpp:jingle:transports:ibb:1">>).
 
 % Defined by XEP-0262: Use of ZRTP in Jingle RTP Sessions.
--define(NS_JINGLE_APPS_RTP_ZRTP_0,
-  'urn:xmpp:jingle:apps:rtp:zrtp:0').
--define(NS_JINGLE_APPS_RTP_ZRTP_0_s,
-  "urn:xmpp:jingle:apps:rtp:zrtp:0").
--define(NS_JINGLE_APPS_RTP_ZRTP_0_b,
-  <<"urn:xmpp:jingle:apps:rtp:zrtp:0">>).
-
-% Defined by XEP-0264: File Transfer Thumbnails.
--define(NS_FT_THUMBS_0,              'urn:xmpp:thumbs:0').
--define(NS_FT_THUMBS_0_s,            "urn:xmpp:thumbs:0").
--define(NS_FT_THUMBS_0_b,            <<"urn:xmpp:thumbs:0">>).
-
-% Defined by XEP-0265: Out-of-Band Stream Data.
--define(NS_JINGLE_APPS_OOB_0,        'urn:xmpp:jingle:apps:out-of-band:0').
--define(NS_JINGLE_APPS_OOB_0_s,      "urn:xmpp:jingle:apps:out-of-band:0").
--define(NS_JINGLE_APPS_OOB_0_b,      <<"urn:xmpp:jingle:apps:out-of-band:0">>).
-
-% Defined by XEP-0268: Incident Reporting.
--define(NS_INCIDENT_REPORT_0,        'urn:xmpp:incident:0').
--define(NS_INCIDENT_REPORT_0_s,      "urn:xmpp:incident:0").
--define(NS_INCIDENT_REPORT_0_b,      <<"urn:xmpp:incident:0">>).
-
-% Defined by XEP-0272: Multiparty Jingle (Muji).
--define(NS_TELEPATHY_MUJI,           'http://telepathy.freedesktop.org/muji').
--define(NS_TELEPATHY_MUJI_s,         "http://telepathy.freedesktop.org/muji").
--define(NS_TELEPATHY_MUJI_b,         <<"http://telepathy.freedesktop.org/muji">>).
+-define(NS_JINGLE_APPS_RTP_ZRTP_1,
+  'urn:xmpp:jingle:apps:rtp:zrtp:1').
+-define(NS_JINGLE_APPS_RTP_ZRTP_1_s,
+  "urn:xmpp:jingle:apps:rtp:zrtp:1").
+-define(NS_JINGLE_APPS_RTP_ZRTP_1_b,
+  <<"urn:xmpp:jingle:apps:rtp:zrtp:1">>).
 
 % Defined by XEP-0273: Stanza Interception and Filtering Technology (SIFT).
--define(NS_SIFT_1,                   'urn:xmpp:sift:1').
--define(NS_SIFT_1_s,                 "urn:xmpp:sift:1").
--define(NS_SIFT_1_b,                 <<"urn:xmpp:sift:1">>).
-
-% Defined by XEP-0275: Entity Reputation.
--define(NS_REPUTATION_0,             'urn:xmpp:reputation:0').
--define(NS_REPUTATION_0_s,           "urn:xmpp:reputation:0").
--define(NS_REPUTATION_0_b,           <<"urn:xmpp:reputation:0">>).
-
-% Defined by XEP-0276: Temporary Presence Sharing.
--define(NS_TEMPPRES_0,               'urn:xmpp:temppres:0').
--define(NS_TEMPPRES_0_s,             "urn:xmpp:temppres:0").
--define(NS_TEMPPRES_0_b,             <<"urn:xmpp:temppres:0">>).
-
-% Defined by XEP-0277: Microblogging over XMPP.
--define(NS_MUBLOG_0,                 'urn:xmpp:microblog:0').
--define(NS_MUBLOG_0_s,               "urn:xmpp:microblog:0").
--define(NS_MUBLOG_0_b,               <<"urn:xmpp:microblog:0">>).
+-define(NS_SIFT_2,                   'urn:xmpp:sift:2').
+-define(NS_SIFT_2_s,                 "urn:xmpp:sift:2").
+-define(NS_SIFT_2_b,                 <<"urn:xmpp:sift:2">>).
 
 % Defined by XEP-0278: Jingle Relay Nodes.
 -define(NS_JINGLE_RELAY_NODES,       'http://jabber.org/protocol/jinglenodes').
@@ -1243,7 +928,45 @@
 -define(NS_SIC_0_s,                  "urn:xmpp:sic:0").
 -define(NS_SIC_0_b,                  <<"urn:xmpp:sic:0">>).
 
-% Defined by XHTML 1.0.
--define(NS_XHTML,                    'http://www.w3.org/1999/xhtml').
--define(NS_XHTML_s,                  "http://www.w3.org/1999/xhtml").
--define(NS_XHTML_b,                  <<"http://www.w3.org/1999/xhtml">>).
+% Defined by XEP-0280: Message Carbons.
+-define(NS_CARBONS_1,                'urn:xmpp:carbons:1').
+-define(NS_CARBONS_1_s,              "urn:xmpp:carbons:1").
+-define(NS_CARBONS_1_b,              <<"urn:xmpp:carbons:1">>).
+
+% Defined by XEP-0287: Spim Markers and Reports.
+-define(NS_SPIM_MARKER_0,            'urn:xmpp:spim-marker:0').
+-define(NS_SPIM_MARKER_0_s,          "urn:xmpp:spim-marker:0").
+-define(NS_SPIM_MARKER_0_b,          <<"urn:xmpp:spim-marker:0">>).
+
+-define(NS_SPIM_REPORT_0,            'urn:xmpp:spim-report:0').
+-define(NS_SPIM_REPORT_0_s,          "urn:xmpp:spim-report:0").
+-define(NS_SPIM_REPORT_0_b,          <<"urn:xmpp:spim-report:0">>).
+
+% Defined by XEP-0297: Message Forwarding.
+-define(NS_FORWARD_0,                'urn:xmpp:forward:0').
+-define(NS_FORWARD_0_s,              "urn:xmpp:forward:0").
+-define(NS_FORWARD_0_b,              <<"urn:xmpp:forward:0">>).
+
+% Defined by XEP-0298: Delivering Conference Information to Jingle Participants (Coin).
+-define(NS_COIN,                     'urn:ietf:params:xml:ns:conference-info').
+-define(NS_COIN_s,                   "urn:ietf:params:xml:ns:conference-info").
+-define(NS_COIN_b,                   <<"urn:ietf:params:xml:ns:conference-info">>).
+
+-define(NS_JINGLE_COIN_1,            'urn:xmpp:jingle:apps:coin:1').
+-define(NS_JINGLE_COIN_1_s,          "urn:xmpp:jingle:apps:coin:1").
+-define(NS_JINGLE_COIN_1_b,          <<"urn:xmpp:jingle:apps:coin:1">>).
+
+% Defined by XEP-0301: In-Band Real Time Text.
+-define(NS_RTT_0,                    'urn:xmpp:rtt:0').
+-define(NS_RTT_0_s,                  "urn:xmpp:rtt:0").
+-define(NS_RTT_0_b,                  <<"urn:xmpp:rtt:0">>).
+
+% Defined by XEP-0304: Whitespace Keepalive Negotiation.
+-define(NS_KEEPALIVE_0,              'urn:xmpp:keepalive:0').
+-define(NS_KEEPALIVE_0_s,            "urn:xmpp:keepalive:0").
+-define(NS_KEEPALIVE_0_b,            <<"urn:xmpp:keepalive:0">>).
+
+% Defined by XEP-0306: Extensible Status Conditions for Multi-User Chat.
+-define(NS_MUC_CONDITIONS_0,         'urn:xmpp:muc:conditions:0').
+-define(NS_MUC_CONDITIONS_0_s,       "urn:xmpp:muc:conditions:0").
+-define(NS_MUC_CONDITIONS_0_b,       <<"urn:xmpp:muc:conditions:0">>).
