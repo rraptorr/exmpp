@@ -822,10 +822,10 @@
 -define(NS_DELAY_b,                  <<"urn:xmpp:delay">>).
 
 % Defined by XEP-0206: XMPP Over BOSH.
--define(NS_BOSH,                     'urn:xmpp:xbosh').
--define(NS_BOSH_s,                   "urn:xmpp:xbosh").
--define(NS_BOSH_b,                   <<"urn:xmpp:xbosh">>).
--define(NS_BOSH_pfx,                 "xmpp").
+-define(NS_XBOSH,                    'urn:xmpp:xbosh').
+-define(NS_XBOSH_s,                  "urn:xmpp:xbosh").
+-define(NS_XBOSH_b,                  <<"urn:xmpp:xbosh">>).
+-define(NS_XBOSH_pfx,                "xmpp").
 
 % Defined by XEP-0220: Server Dialback.
 -define(NS_DIALBACK,                 'jabber:server:dialback').
