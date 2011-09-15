@@ -4,6 +4,7 @@
 #include "exmpp_tls.h"
 
 #define	DRIVER_NAME	exmpp_tls_gnutls
+#define MIN_GNUTLS_VER  "2.12.0"
 
 #define	BUF_SIZE	4096
 
@@ -147,6 +148,10 @@ exmpp_gnutls_mutex_deinit(void **mutex)
 static int
 exmpp_tls_gnutls_init(void)
 {
+	if (gnutls_check_version(MIN_GNUTLS_VER) == NULL) {
+		return -1;
+	}
+
 	gnutls_global_set_mem_functions(driver_alloc, driver_alloc, NULL,
 					driver_realloc, driver_free);
 	gnutls_global_set_mutex(exmpp_gnutls_mutex_init, exmpp_gnutls_mutex_deinit,
