@@ -5,6 +5,7 @@
 
 #define	DRIVER_NAME	exmpp_tls_gnutls
 #define MIN_GNUTLS_VER  "2.12.0"
+#define PRIORITY        "PERFORMANCE:-COMP-NULL:+COMP-DEFLATE:+COMP-NULL"
 
 #define	BUF_SIZE	4096
 
@@ -160,7 +161,7 @@ exmpp_tls_gnutls_init(void)
 		return -1;
 	}
 
-	if (gnutls_priority_init(&priority, "PERFORMANCE:+COMP-DEFLATE", NULL) != GNUTLS_E_SUCCESS) {
+	if (gnutls_priority_init(&priority, PRIORITY, NULL) != GNUTLS_E_SUCCESS) {
 		gnutls_global_deinit();
 		return -1;
 	}
