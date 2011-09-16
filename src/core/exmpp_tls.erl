@@ -153,7 +153,7 @@ start_link() ->
 -ifdef(HAVE_GNUTLS).
 -define(REGISTER_GNUTLS,
 	register_builtin_engine(gnutls, exmpp_tls_gnutls,
-				[{x509, 5}])).
+				[{x509, 20}])).
 -else.
 -define(REGISTER_GNUTLS, ok).
 -endif.
