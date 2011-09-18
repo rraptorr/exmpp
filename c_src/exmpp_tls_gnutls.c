@@ -479,6 +479,7 @@ exmpp_tls_gnutls_control(ErlDrvData drv_data, unsigned int command,
 			if (ret < 0) {
 				return -1;
 			}
+			gnutls_certificate_send_x509_rdn_sequence(*edd->session, 1);
 		}
 		if (edd->verify_peer) {
 			gnutls_certificate_set_verify_function(*edd->credentials, exmpp_gnutls_verify);
