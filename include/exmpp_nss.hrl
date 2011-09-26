@@ -553,15 +553,15 @@
 
 % Defined by XEP-0079: Advanced Message Processing.
 -define(NS_AMP,                      'http://jabber.org/protocol/amp').
--define(NS_AMP_ERRORS,               'http://jabber.org/protocol/amp#error').
+-define(NS_AMP_ERRORS,               'http://jabber.org/protocol/amp#errors').
 -define(NS_AMP_FEAT,                 'http://jabber.org/features/amp').
 
 -define(NS_AMP_s,                    "http://jabber.org/protocol/amp").
--define(NS_AMP_ERRORS_s,             "http://jabber.org/protocol/amp#error").
+-define(NS_AMP_ERRORS_s,             "http://jabber.org/protocol/amp#errors").
 -define(NS_AMP_FEAT_s,               "http://jabber.org/features/amp").
 
 -define(NS_AMP_b,                    <<"http://jabber.org/protocol/amp">>).
--define(NS_AMP_ERRORS_b,             <<"http://jabber.org/protocol/amp#error">>).
+-define(NS_AMP_ERRORS_b,             <<"http://jabber.org/protocol/amp#errors">>).
 -define(NS_AMP_FEAT_b,               <<"http://jabber.org/features/amp">>).
 
 % Defined by XEP-0080: User Location.
