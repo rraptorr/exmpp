@@ -45,6 +45,16 @@
 #define	strdup(s) _strdup(s)
 #endif
 
+#define	COPY_AND_FREE_BUF(to_send, size, b, ret)			\
+	do {                                                            \
+                (size) = (to_send)->index + 1;				\
+	        (b) = driver_alloc_binary((size));			\
+	        (b)->orig_bytes[0] = (ret);				\
+	        memcpy((b)->orig_bytes + 1, (to_send)->buff,		\
+	            (to_send)->index);					\
+	        exmpp_free_xbuf((to_send));                             \
+        } while(0)
+
 /* Simple hashtable. */
 struct exmpp_hashtable;
 

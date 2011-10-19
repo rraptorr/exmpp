@@ -56,6 +56,34 @@ enum {
 	RET_WANT_WRITE
 };
 
-int	match_hostname(const char *cert_id, const char *expected_id);
+struct exmpp_tls_ctx {
+	long		 mode;
+
+	/* Identity. */
+	char		*certificate;
+	char		*private_key;
+
+	/* Peer verification. */
+	int		 verify_peer;
+	char		*expected_id;
+
+	/* Options. */
+	char		*trusted_certs;
+	int		 peer_cert_required;
+	int		 accept_expired_cert;
+	int		 accept_revoked_cert;
+	int		 accept_non_trusted_cert;
+	int		 accept_corrupted_cert;
+};
+
+extern unsigned char exmpp_tls_dh1024_p[];
+extern unsigned int exmpp_tls_dh1024_p_size;
+extern unsigned char exmpp_tls_dh1024_g[];
+extern unsigned int exmpp_tls_dh1024_g_size;
+
+int     exmpp_tls_init_context(struct exmpp_tls_ctx *ctx);
+void    exmpp_tls_free_context(struct exmpp_tls_ctx *ctx);
+int	exmpp_tls_match_hostname(const char *cert_id, const char *expected_id);
+int     exmpp_tls_control(struct exmpp_tls_ctx *ctx, unsigned int command, const char *buf, ErlDrvBinary **b, size_t *size);
 
 #endif /* !defined(EXMPP_TLS_H) */

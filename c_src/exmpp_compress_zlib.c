@@ -33,14 +33,6 @@ struct exmpp_compress_zlib_data {
 	z_stream	def_z;
 };
 
-#define	COPY_AND_FREE_BUF(to_send, size, b, ret)			\
-	(size) = (to_send)->index + 1;					\
-	(b) = driver_alloc_binary((size));				\
-	(b)->orig_bytes[0] = (ret);					\
-	memcpy((b)->orig_bytes + 1, (to_send)->buff,			\
-	    (to_send)->index);						\
-	exmpp_free_xbuf((to_send));
-
 static void*
 exmpp_compress_zlib_alloc(void *opaque, unsigned int items, unsigned int size)
 {
