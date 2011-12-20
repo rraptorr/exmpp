@@ -881,9 +881,9 @@
 -define(NS_SEC_LABEL_0_s,            "urn:xmpp:sec-label:0").
 -define(NS_SEC_LABEL_0_b,            <<"urn:xmpp:sec-label:0">>).
 
--define(NS_SEC_LABEL_CATALOG_1,      'urn:xmpp:sec-label:catalog:1').
--define(NS_SEC_LABEL_CATALOG_1_s,    "urn:xmpp:sec-label:catalog:1").
--define(NS_SEC_LABEL_CATALOG_1_b,    <<"urn:xmpp:sec-label:catalog:1">>).
+-define(NS_SEC_LABEL_CATALOG_2,      'urn:xmpp:sec-label:catalog:2').
+-define(NS_SEC_LABEL_CATALOG_2_s,    "urn:xmpp:sec-label:catalog:2").
+-define(NS_SEC_LABEL_CATALOG_2_b,    <<"urn:xmpp:sec-label:catalog:2">>).
 
 -define(NS_SEC_LABEL_ESS_0,          'urn:xmpp:sec-label:ess:0').
 -define(NS_SEC_LABEL_ESS_0_s,        "urn:xmpp:sec-label:ess:0").
@@ -933,15 +933,6 @@
 -define(NS_CARBONS_1_s,              "urn:xmpp:carbons:1").
 -define(NS_CARBONS_1_b,              <<"urn:xmpp:carbons:1">>).
 
-% Defined by XEP-0287: Spim Markers and Reports.
--define(NS_SPIM_MARKER_0,            'urn:xmpp:spim-marker:0').
--define(NS_SPIM_MARKER_0_s,          "urn:xmpp:spim-marker:0").
--define(NS_SPIM_MARKER_0_b,          <<"urn:xmpp:spim-marker:0">>).
-
--define(NS_SPIM_REPORT_0,            'urn:xmpp:spim-report:0').
--define(NS_SPIM_REPORT_0_s,          "urn:xmpp:spim-report:0").
--define(NS_SPIM_REPORT_0_b,          <<"urn:xmpp:spim-report:0">>).
-
 % Defined by XEP-0297: Message Forwarding.
 -define(NS_FORWARD_0,                'urn:xmpp:forward:0').
 -define(NS_FORWARD_0_s,              "urn:xmpp:forward:0").
@@ -967,6 +958,11 @@
 -define(NS_KEEPALIVE_0_b,            <<"urn:xmpp:keepalive:0">>).
 
 % Defined by XEP-0306: Extensible Status Conditions for Multi-User Chat.
--define(NS_MUC_CONDITIONS_0,         'urn:xmpp:muc:conditions:0').
--define(NS_MUC_CONDITIONS_0_s,       "urn:xmpp:muc:conditions:0").
--define(NS_MUC_CONDITIONS_0_b,       <<"urn:xmpp:muc:conditions:0">>).
+-define(NS_MUC_CONDITIONS_1,         'urn:xmpp:muc:conditions:1').
+-define(NS_MUC_CONDITIONS_1_s,       "urn:xmpp:muc:conditions:1").
+-define(NS_MUC_CONDITIONS_1_b,       <<"urn:xmpp:muc:conditions:1">>).
+
+% Defined by XEP-0308: Last Message Correction
+-define(NS_MESSAGE_CORRECT,          'urn:xmpp:message-correct:0').
+-define(NS_MESSAGE_CORRECT_s,        "urn:xmpp:message-correct:0").
+-define(NS_MESSAGE_CORRECT_b,        <<"urn:xmpp:message-correct:0">>).
